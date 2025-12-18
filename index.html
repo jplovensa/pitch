@@ -1,0 +1,577 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SECHA — Investor Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0B0F14; --panel:#0F1620; --panel2:#0C121A;
+      --text:#E7ECF2; --muted:#AAB4C0; --line:rgba(231,236,242,.12);
+      --gold:#C8A24A; --gold2:#E1C06A; --shadow:0 12px 40px rgba(0,0,0,.45);
+      --radius:18px; --radius2:24px; --max:1120px;
+      --ok:#4ADE80; --warn:#FBBF24; --info:#60A5FA;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:radial-gradient(1000px 500px at 15% 10%, rgba(200,162,74,.15), transparent 60%),
+                 radial-gradient(900px 600px at 85% 35%, rgba(96,165,250,.10), transparent 55%),
+                 var(--bg);
+      color:var(--text); line-height:1.35;
+    }
+    a{color:inherit; text-decoration:none}
+    .wrap{max-width:var(--max); margin:0 auto; padding:28px 18px 90px}
+    .topbar{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(10px);
+      background:linear-gradient(to bottom, rgba(11,15,20,.92), rgba(11,15,20,.65));
+      border-bottom:1px solid var(--line);
+    }
+    .topbar .inner{max-width:var(--max); margin:0 auto; padding:14px 18px; display:flex; align-items:center; gap:14px}
+    .brand{display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.14em; text-transform:uppercase;}
+    .mark{
+      width:30px; height:30px; border:1px solid var(--line); border-radius:10px;
+      display:grid; place-items:center;
+      background:linear-gradient(180deg, rgba(200,162,74,.16), rgba(200,162,74,.04));
+    }
+    .mark span{color:var(--gold); font-weight:800}
+    nav{margin-left:auto; display:flex; gap:14px; flex-wrap:wrap}
+    nav a{font-size:13px; color:var(--muted); padding:8px 10px; border-radius:10px; border:1px solid transparent;}
+    nav a:hover{color:var(--text); border-color:var(--line); background:rgba(255,255,255,.03)}
+    .btn{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:12px 14px; border-radius:14px; border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      font-weight:600; font-size:14px;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+    }
+    .btn.primary{
+      border-color:rgba(200,162,74,.5);
+      background:linear-gradient(180deg, rgba(200,162,74,.22), rgba(200,162,74,.08));
+      box-shadow:0 10px 30px rgba(200,162,74,.14);
+    }
+    .btn:hover{transform:translateY(-1px); background:rgba(255,255,255,.04)}
+    .hero{padding:44px 0 18px}
+    .kicker{color:var(--gold2); font-weight:600; letter-spacing:.08em; text-transform:uppercase; font-size:12px}
+    h1{font-size:44px; margin:10px 0 10px; letter-spacing:-.02em}
+    .sub{max-width:780px; color:var(--muted); font-size:16px}
+    .ctaRow{display:flex; gap:12px; flex-wrap:wrap; margin-top:18px}
+    .grid{display:grid; gap:14px; grid-template-columns:repeat(12, 1fr); margin-top:22px;}
+    .card{
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+      border-radius:var(--radius2);
+      padding:18px;
+      box-shadow:var(--shadow);
+    }
+    .card h3{margin:0 0 8px; font-size:16px}
+    .card p{margin:0; color:var(--muted); font-size:14px}
+    .stat{font-size:28px; font-weight:800; color:var(--text); letter-spacing:-.02em}
+    .label{color:var(--muted); font-size:12px; margin-top:6px}
+    .col12{grid-column:span 12}
+    .col8{grid-column:span 8}
+    .col7{grid-column:span 7}
+    .col6{grid-column:span 6}
+    .col5{grid-column:span 5}
+    .col4{grid-column:span 4}
+    section{padding-top:46px}
+    section h2{font-size:22px; margin:0 0 10px}
+    .pillRow{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px}
+    .pill{
+      padding:8px 10px; border-radius:999px; border:1px solid var(--line);
+      color:var(--muted); font-size:12px; background:rgba(255,255,255,.02);
+    }
+    .twoCol{display:grid; gap:14px; grid-template-columns:repeat(12,1fr)}
+    .list{margin:10px 0 0; padding:0 0 0 18px; color:var(--muted); font-size:14px}
+    .list li{margin:6px 0}
+    .hr{height:1px; background:var(--line); margin:18px 0}
+    .sku{
+      padding:16px; border-radius:18px; border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(15,22,32,.75), rgba(12,18,26,.75));
+    }
+    .sku .t{display:flex; justify-content:space-between; align-items:baseline; gap:10px}
+    .sku .name{font-weight:800; letter-spacing:.04em}
+    .sku .cap{color:var(--gold2); font-weight:700}
+    .sku .meta{margin-top:8px; color:var(--muted); font-size:13px}
+
+    /* Prototype tabs */
+    .protoWrap{border:1px solid var(--line); border-radius:var(--radius2); overflow:hidden; box-shadow:var(--shadow)}
+    .protoTop{
+      display:flex; gap:8px; flex-wrap:wrap; align-items:center;
+      padding:12px; border-bottom:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(15,22,32,.85), rgba(12,18,26,.85));
+    }
+    .tab{
+      padding:10px 12px; border-radius:14px; border:1px solid var(--line);
+      color:var(--muted); font-size:13px; font-weight:600;
+      background:rgba(255,255,255,.02);
+      cursor:pointer; user-select:none;
+    }
+    .tab.active{
+      color:var(--text);
+      border-color:rgba(200,162,74,.55);
+      background:linear-gradient(180deg, rgba(200,162,74,.22), rgba(200,162,74,.06));
+    }
+    .protoBody{padding:18px; background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01))}
+    .protoPanel{display:none}
+    .protoPanel.active{display:block}
+
+    /* Lender story flow */
+    .flow{
+      display:grid; gap:10px;
+      grid-template-columns:repeat(12, 1fr);
+      margin-top:12px;
+    }
+    .step{
+      grid-column:span 3;
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px;
+      background:rgba(255,255,255,.02);
+      position:relative;
+      min-height:120px;
+    }
+    .step .n{
+      display:inline-flex; align-items:center; justify-content:center;
+      width:26px; height:26px; border-radius:10px;
+      border:1px solid var(--line);
+      font-weight:800; font-size:12px;
+      margin-bottom:10px;
+      background:rgba(255,255,255,.02);
+    }
+    .step .t{font-weight:800; margin:0 0 6px; letter-spacing:-.01em}
+    .step .d{color:var(--muted); font-size:13px; margin:0}
+    .arrow{
+      position:absolute; right:-12px; top:50%; transform:translateY(-50%);
+      width:24px; height:24px; border-radius:12px;
+      border:1px solid var(--line);
+      background:rgba(11,15,20,.95);
+      display:grid; place-items:center;
+      color:var(--muted);
+      font-weight:800;
+    }
+    .step:last-child .arrow{display:none}
+    .badgeRow{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px}
+    .badge{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 10px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:rgba(255,255,255,.02);
+      color:var(--muted);
+      font-size:12px;
+    }
+    .dot{width:8px; height:8px; border-radius:99px; display:inline-block}
+    .dot.ok{background:var(--ok)}
+    .dot.warn{background:var(--warn)}
+    .dot.info{background:var(--info)}
+
+    /* Raise bars */
+    .alloc{display:grid; gap:10px; margin-top:12px}
+    .bar{border:1px solid var(--line); border-radius:14px; overflow:hidden; background:rgba(255,255,255,.02);}
+    .bar .fill{height:12px; background:linear-gradient(90deg, rgba(200,162,74,.75), rgba(200,162,74,.25))}
+    .allocRow{display:flex; justify-content:space-between; gap:12px; margin-top:6px; color:var(--muted); font-size:13px}
+
+    footer{margin-top:56px; color:var(--muted); font-size:12px}
+
+    @media (max-width: 960px){
+      h1{font-size:34px}
+      nav{display:none}
+      .col8,.col7,.col6,.col5,.col4{grid-column:span 12}
+      .step{grid-column:span 12}
+      .arrow{display:none}
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="inner">
+      <div class="brand">
+        <div class="mark"><span>S</span></div>
+        SECHA
+      </div>
+      <nav>
+        <a href="#prototype">Prototype</a>
+        <a href="#problem">Problem</a>
+        <a href="#product">Product</a>
+        <a href="#traction">Traction</a>
+        <a href="#roadmap">Roadmap</a>
+        <a href="#raise">Raise</a>
+      </nav>
+      <a class="btn primary" id="dealroomBtn" href="#" target="_blank" rel="noreferrer">Request Deal Room →</a>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <header class="hero" id="top">
+      <div class="kicker">Investor Portal • Infrastructure Mode</div>
+      <h1>Credit Infrastructure for Homes Banks Can’t Finance</h1>
+      <div class="sub">
+        SECHA unlocks unfinanceable secondary homes by converting renovation into a standardized credit trigger —
+        turning opaque physical condition risk into measurable underwriting data.
+      </div>
+      <div class="ctaRow">
+        <a class="btn primary" id="deckBtn" href="#" target="_blank" rel="noreferrer">View Deck</a>
+        <a class="btn" href="#prototype">See Prototype</a>
+        <a class="btn" href="#raise">Raise: $1.5M</a>
+      </div>
+
+      <div class="grid">
+        <div class="card col4">
+          <div class="stat">60–80%</div>
+          <div class="label">Secondary homes fail underwriting</div>
+        </div>
+        <div class="card col4">
+          <div class="stat">$50B</div>
+          <div class="label">Indonesia renovation spend (TAM)</div>
+        </div>
+        <div class="card col4">
+          <div class="stat">90%</div>
+          <div class="label">Still offline — credit layer missing</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Prototype (clickable) -->
+    <section id="prototype">
+      <h2>Prototype</h2>
+      <div class="protoWrap">
+        <div class="protoTop">
+          <div class="tab active" data-tab="lender-story">Lender Integration Story</div>
+          <div class="tab" data-tab="engine">Engine</div>
+          <div class="tab" data-tab="skus">SKUs</div>
+          <div class="tab" data-tab="risk-logic">Risk Logic</div>
+          <div class="tab" data-tab="dealroom">Deal Room</div>
+        </div>
+
+        <div class="protoBody">
+          <!-- Lender Story -->
+          <div class="protoPanel active" id="lender-story">
+            <div class="twoCol">
+              <div class="card col7">
+                <h3>One embedded lender flow (end-to-end)</h3>
+                <p>
+                  This replaces the tenant journey entirely. The core story is a lender integration:
+                  <b>credit activated → disbursed → repaid → risk reduced</b>.
+                </p>
+
+                <div class="flow">
+                  <div class="step">
+                    <div class="n">1</div>
+                    <div class="t">Credit Activated</div>
+                    <p class="d">Partner triggers SECHA assessment on a secondary home. Eligibility mapped to a standardized SKU.</p>
+                    <div class="arrow">→</div>
+                  </div>
+                  <div class="step">
+                    <div class="n">2</div>
+                    <div class="t">Milestone Disbursed</div>
+                    <p class="d">Funds release to verified milestones. Scope is fixed; variance is controlled; reporting is lender-ready.</p>
+                    <div class="arrow">→</div>
+                  </div>
+                  <div class="step">
+                    <div class="n">3</div>
+                    <div class="t">Repayment Tracked</div>
+                    <p class="d">Repayments follow the lender’s terms. SECHA provides monitoring, delinquency signals, and transparency.</p>
+                    <div class="arrow">→</div>
+                  </div>
+                  <div class="step">
+                    <div class="n">4</div>
+                    <div class="t">Risk Reduced</div>
+                    <p class="d">Post-renovation condition & outcome data feeds back into pricing and eligibility. The model compounds.</p>
+                  </div>
+                </div>
+
+                <div class="badgeRow">
+                  <div class="badge"><span class="dot info"></span> Triggered upstream (agent / bank desk / platform)</div>
+                  <div class="badge"><span class="dot warn"></span> Controlled variance via SKU scope bands</div>
+                  <div class="badge"><span class="dot ok"></span> Outcomes data improves underwriting</div>
+                </div>
+              </div>
+
+              <div class="card col5">
+                <h3>Integration points</h3>
+                <ul class="list">
+                  <li><b>API / Portal:</b> eligibility check, SKU selection, pricing</li>
+                  <li><b>Disbursement:</b> milestone approvals + audit trail</li>
+                  <li><b>Reporting:</b> lender dashboards + monthly performance</li>
+                  <li><b>Risk feedback:</b> condition score → outcome score loop</li>
+                </ul>
+                <div class="hr"></div>
+                <h3>What the lender gets</h3>
+                <ul class="list">
+                  <li>Underwriteable asset profile</li>
+                  <li>Reduced default risk through controlled scope</li>
+                  <li>Repeatable product with predictable parameters</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Engine -->
+          <div class="protoPanel" id="engine">
+            <div class="twoCol">
+              <div class="card col12">
+                <h3>The SECHA Engine</h3>
+                <p>Renovation is a standardized credit trigger. The engine converts unknown physical risk into measurable creditworthiness.</p>
+                <ul class="list">
+                  <li><b>1) Risk Scoring:</b> structured condition assessment → risk profile</li>
+                  <li><b>2) Scope Standardization:</b> fixed intervention bands → reduced variance</li>
+                  <li><b>3) Decisioning:</b> rules-based underwriting compatible with lenders</li>
+                  <li><b>4) Orchestration:</b> milestone disbursement + monitoring + reporting</li>
+                  <li><b>5) Feedback Loop:</b> outcomes improve eligibility + pricing</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- SKUs -->
+          <div class="protoPanel" id="skus">
+            <div class="twoCol">
+              <div class="sku col4">
+                <div class="t"><div class="name">SECHA-R25</div><div class="cap">≤ Rp250M</div></div>
+                <div class="meta">Fixed scope band • fixed pricing • fixed risk parameters</div>
+              </div>
+              <div class="sku col4">
+                <div class="t"><div class="name">SECHA-R50</div><div class="cap">≤ Rp500M</div></div>
+                <div class="meta">Milestone disbursement • lender-ready reporting</div>
+              </div>
+              <div class="sku col4">
+                <div class="t"><div class="name">SECHA-R100</div><div class="cap">≤ Rp1B</div></div>
+                <div class="meta">Higher-ticket upgrade • standardized eligibility</div>
+              </div>
+              <div class="card col12">
+                <h3>Scale rule</h3>
+                <p>If it doesn’t fit a SKU, it doesn’t scale. This prevents SECHA becoming a bespoke services business.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Risk Logic -->
+          <div class="protoPanel" id="risk-logic">
+            <div class="twoCol">
+              <div class="card col6">
+                <h3>Inputs</h3>
+                <ul class="list">
+                  <li>Property condition checklist → condition score</li>
+                  <li>Documentation completeness → doc score</li>
+                  <li>SKU scope band → variance ceiling</li>
+                  <li>Neighborhood + comps → valuation anchor</li>
+                </ul>
+              </div>
+              <div class="card col6">
+                <h3>Decision outputs</h3>
+                <ul class="list">
+                  <li>Eligible / ineligible</li>
+                  <li>Approved SKU + price band</li>
+                  <li>Milestone disbursement plan</li>
+                  <li>Reporting cadence + monitoring flags</li>
+                </ul>
+              </div>
+              <div class="card col12">
+                <h3>Feedback loop (the compounding advantage)</h3>
+                <p>Post-renovation outcomes feed back into underwriting to improve pricing, eligibility, and risk selection over time.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dealroom -->
+          <div class="protoPanel" id="dealroom">
+            <div class="twoCol">
+              <div class="card col7">
+                <h3>Deal Room Access</h3>
+                <p>Provide a single secure entry point for: deck, metrics, cap table, legal docs, partner letters, and data room index.</p>
+                <div class="hr"></div>
+                <ul class="list">
+                  <li>Pitch deck (latest)</li>
+                  <li>Traction & KPIs</li>
+                  <li>Bank / partner pipeline</li>
+                  <li>Financial model</li>
+                  <li>Corporate docs</li>
+                </ul>
+              </div>
+              <div class="card col5">
+                <h3>Request access</h3>
+                <p>Click below to request the deal room link.</p>
+                <div class="hr"></div>
+                <a class="btn primary" id="dealroomBtn2" href="#" target="_blank" rel="noreferrer">Request Deal Room →</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Problem -->
+    <section id="problem">
+      <h2>The Problem</h2>
+      <div class="twoCol">
+        <div class="card col6">
+          <h3>Credit can’t see inside the asset.</h3>
+          <ul class="list">
+            <li>Condition risk is opaque → underwriting fails</li>
+            <li>Renovation requires upfront cash → demand stalls</li>
+            <li>Mortgage top-ups are slow & rigid</li>
+            <li>Paylater is not built for housing</li>
+          </ul>
+        </div>
+        <div class="card col6">
+          <h3>System outcome</h3>
+          <ul class="list">
+            <li>Trapped value in secondary homes</li>
+            <li>Idle bank liquidity with limited safe deployment</li>
+            <li>Transactions don’t move; communities don’t upgrade</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Product quick -->
+    <section id="product">
+      <h2>Product (Quick)</h2>
+      <div class="twoCol">
+        <div class="card col12">
+          <h3>SECHA is embedded credit infrastructure</h3>
+          <p>We standardize renovation as a credit trigger so lenders can finance homes they currently cannot underwrite.</p>
+          <div class="pillRow">
+            <div class="pill">Upstream triggers</div>
+            <div class="pill">Standardized SKUs</div>
+            <div class="pill">Milestone disbursement</div>
+            <div class="pill">Outcomes data loop</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Traction -->
+    <section id="traction">
+      <h2>Traction</h2>
+      <div class="twoCol">
+        <div class="card col6">
+          <h3>Early proof of credit unlock</h3>
+          <ul class="list">
+            <li>Renovation-linked financing for previously rejected homes</li>
+            <li><b>$150K</b> projects delivered (2025)</li>
+            <li><b>~28%</b> average margin</li>
+          </ul>
+        </div>
+        <div class="card col6">
+          <h3>Distribution + partners</h3>
+          <ul class="list">
+            <li><b>100+</b> partner agents</li>
+            <li><b>4</b> banking partners engaged</li>
+            <li>Growing dataset on condition risk ↔ outcomes</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Roadmap -->
+    <section id="roadmap">
+      <h2>Roadmap</h2>
+      <div class="twoCol">
+        <div class="card col4">
+          <h3>Phase 1</h3>
+          <p>Foundation</p>
+          <ul class="list">
+            <li>Validate credit trigger</li>
+            <li>Scope bands</li>
+            <li>Unit economics</li>
+          </ul>
+        </div>
+        <div class="card col4">
+          <h3>Phase 2</h3>
+          <p>Engine Build</p>
+          <ul class="list">
+            <li>Finalize SKUs</li>
+            <li>Decisioning rules</li>
+            <li>Lender integrations</li>
+          </ul>
+        </div>
+        <div class="card col4">
+          <h3>Phase 3</h3>
+          <p>Platformization</p>
+          <ul class="list">
+            <li>Partner-triggered flows</li>
+            <li>Reporting layer</li>
+            <li>Scale without headcount</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Raise -->
+    <section id="raise">
+      <h2>Raise: USD 1.5M</h2>
+      <div class="twoCol">
+        <div class="card col7">
+          <h3>Use of funds (24 months)</h3>
+
+          <div class="alloc">
+            <div class="bar"><div class="fill" style="width:40%"></div></div>
+            <div class="allocRow"><span><b>40%</b> — Credit Engine & Product</span><span>$600K</span></div>
+
+            <div class="bar"><div class="fill" style="width:25%"></div></div>
+            <div class="allocRow"><span><b>25%</b> — Bank & Partner Integrations</span><span>$375K</span></div>
+
+            <div class="bar"><div class="fill" style="width:20%"></div></div>
+            <div class="allocRow"><span><b>20%</b> — Data & Platformization</span><span>$300K</span></div>
+
+            <div class="bar"><div class="fill" style="width:15%"></div></div>
+            <div class="allocRow"><span><b>15%</b> — Core Team & Ops</span><span>$225K</span></div>
+          </div>
+
+          <div class="hr"></div>
+          <h3>Milestones this round</h3>
+          <ul class="list">
+            <li>Decisioning engine v1 live (rules-based)</li>
+            <li>3 standardized SKUs launched end-to-end</li>
+            <li>2–3 lender integrations with reporting</li>
+            <li>Repeatable credit activation in one metro</li>
+          </ul>
+        </div>
+
+        <div class="card col5">
+          <h3>Request deal room</h3>
+          <p>We’ll share metrics, model, pipeline, and documentation.</p>
+          <div class="hr"></div>
+          <a class="btn primary" id="dealroomBtn3" href="#" target="_blank" rel="noreferrer">Request Deal Room →</a>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      © 2025 SECHA. All rights reserved. • Security • Privacy • Terms
+    </footer>
+  </div>
+
+  <script>
+    // Replace these with your real links
+    const DECK_URL = "https://jplovensa.github.io/SECHA-Investor-portal/"; // replace with deck URL or PDF link
+    const DEALROOM_URL = "mailto:josephine@secha.home?subject=SECHA%20Deal%20Room%20Access";
+
+    document.getElementById("deckBtn").href = DECK_URL;
+    document.getElementById("dealroomBtn").href = DEALROOM_URL;
+    document.getElementById("dealroomBtn2").href = DEALROOM_URL;
+    document.getElementById("dealroomBtn3").href = DEALROOM_URL;
+
+    // Tabs
+    const tabs = document.querySelectorAll(".tab");
+    const panels = document.querySelectorAll(".protoPanel");
+    tabs.forEach(t => {
+      t.addEventListener("click", () => {
+        tabs.forEach(x => x.classList.remove("active"));
+        t.classList.add("active");
+        const id = t.getAttribute("data-tab");
+        panels.forEach(p => p.classList.remove("active"));
+        document.getElementById(id).classList.add("active");
+      });
+    });
+  </script>
+</body>
+</html>
